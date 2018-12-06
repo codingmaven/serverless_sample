@@ -26,7 +26,7 @@ const withStatusCode = (statusCode, formatter = null) => {
     }
 
     return response;
-  }
+  };
 };
 
 module.exports = {

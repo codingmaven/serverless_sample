@@ -1,12 +1,12 @@
 require('dotenv/config');
 
-const { ContactRepository } = require('../../repositories/contact.repository');
+const { UserRepository } = require('../../repositories/user.repository');
 const { withStatusCode } = require('../../utils/response.util');
 const { parseWith } = require('../../utils/request.util');
 const { withProcessEnv } = require('../../dynamodb.factory');
 
 const docClient = withProcessEnv(process.env)();
-const repository = new ContactRepository(docClient);
+const repository = new UserRepository(docClient);
 const created = withStatusCode(201);
 const parseJson = parseWith(JSON.parse);
 

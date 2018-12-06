@@ -1,4 +1,4 @@
-service: address-book-api 
+service: user-api
 
 provider:
   name: aws
@@ -7,7 +7,7 @@ provider:
   region: us-west-2
 
 functions:
-  - '${file(src/handlers/contacts/contacts.serverless.yml)}'
+  - '${file(src/handlers/users/users.serverless.yml)}'
 
 plugins:
   - serverless-offline

@@ -1,17 +1,20 @@
-const { ContactRepository } = require('./contact.repository');
+/*global spyOn*/
+/*global fail*/
 
-describe('Contacts Repository', () => {
+const { UserRepository } = require('./user.repository');
+
+describe('Users Repository', () => {
   /** @type {AWS.DynamoDB.DocumentClient} */
   const mockDocClient = {
     scan: params => { },
     // query: params => mockAwsRequest,
     get: params => { },
     put: params => { },
-    delete: params => { },
+    delete: params => { }
     // update: params => { }
   };
 
-  const mockContacts = [
+  const mockUsers = [
     { id: '1', name: 'Jin Erso' },
     { id: '2', name: 'Luke Skywalker' },
     { id: '3', name: 'Darth Vadar' }
@@ -23,26 +26,26 @@ describe('Contacts Repository', () => {
     };
   };
 
-  /** @type {ContactsRepository} */
+  /** @type {UsersRepository} */
   let respository;
 
   beforeEach(() => {
-    respository = new ContactRepository(mockDocClient);
+    respository = new UserRepository(mockDocClient);
   });
 
   it('should construct a new respository', () => {
     expect(respository).toBeDefined();
   });
 
-  it('should list contacts', async () => {
+  it('should list users', async () => {
     const expectedResult = {
-      Items: mockContacts.slice()
+      Items: mockUsers.slice()
     };
 
     spyOn(mockDocClient, 'scan').and.returnValues(createAwsRequest(expectedResult), createAwsRequest({ Items: null }));
 
     const awsParams = {
-      TableName: 'contacts'
+      TableName: 'users'
     };
 
     const results = await respository.list();
@@ -69,50 +72,50 @@ describe('Contacts Repository', () => {
     }
   });
 
-  it('should get a contact by id', async () => {
+  it('should get a user by id', async () => {
     const expectedResult = {
-      Item: Object.assign({}, mockContacts[0])
+      Item: Object.assign({}, mockUsers[0])
     };
 
     spyOn(mockDocClient, 'get').and.returnValue(createAwsRequest(expectedResult));
 
     const id = '1';
     const awsParams = {
-      TableName: 'contacts',
+      TableName: 'users',
       Key: { id }
     };
 
-    const contact = await respository.get(id);
+    const user = await respository.get(id);
 
-    expect(contact).toBeDefined();
-    expect(contact).toEqual(expectedResult.Item);
+    expect(user).toBeDefined();
+    expect(user).toEqual(expectedResult.Item);
     expect(mockDocClient.get).toHaveBeenCalledWith(awsParams);
   });
 
   it('should put a new item in the db', async () => {
     spyOn(mockDocClient, 'put').and.returnValue(createAwsRequest());
 
-    const newContact = {
+    const newUser = {
       id: '4',
       name: 'Han Solo'
     };
 
     const awsParams = {
-      TableName: 'contacts',
-      Item: newContact
+      TableName: 'users',
+      Item: newUser
     };
 
-    const contact = await respository.put(newContact);
+    const user = await respository.put(newUser);
 
-    expect(contact).toBeDefined();
+    expect(user).toBeDefined();
     expect(mockDocClient.put).toHaveBeenCalledWith(awsParams);
   });
 
-  it('should delete a contact, by id', async () => {
+  it('should delete a user, by id', async () => {
     spyOn(mockDocClient, 'delete').and.returnValue(createAwsRequest());
 
     const id = '1';
-    const awsParams = { TableName: 'contacts', Key: { id } };
+    const awsParams = { TableName: 'users', Key: { id } };
 
     const deletedid = await respository.delete(id);
 

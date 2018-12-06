@@ -3,23 +3,9 @@ namespace Models {
     id: string;
     firstName: string;
     lastName: string;
-    phones: PhoneNumber[];
-    addresses: Address[];
-  }
-
-  interface PhoneNumber {
-    country: number;
-    area: number;
-    no: number;
-    ext: number;
-  }
-
-  interface Address {
-    address1: string;
-    address2: string
-    city: string;
-    state: string;
-    zip: number;
+    username: string;
+    password: string;
+    role: string
   }
 
   interface Response {

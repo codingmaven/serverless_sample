@@ -1,5 +1,5 @@
 
-class ContactSeeder {
+class UserSeeder {
   /**
    * Constructs a new Contacts seeder
    * @param {AWS.DynamoDB} dynamodb The dynamo db instance
@@ -9,7 +9,7 @@ class ContactSeeder {
     this.dynamodb = dynamodb;
     this.docClient = docClient;
 
-    this._tablename = 'contacts';
+    this._tablename = 'users';
   }
 
   async hasTable() {
@@ -26,19 +26,19 @@ class ContactSeeder {
         {
           // Required HASH type attribute
           AttributeName: 'id',
-          KeyType: 'HASH',
+          KeyType: 'HASH'
         }
       ],
       AttributeDefinitions: [
         // The names and types of all primary and index key attributes only
         {
           AttributeName: 'id',
-          AttributeType: 'S', // (S | N | B) for string, number, binary
+          AttributeType: 'S' // (S | N | B) for string, number, binary
         }
       ],
       ProvisionedThroughput: { // required provisioned throughput for the table
         ReadCapacityUnits: 1,
-        WriteCapacityUnits: 1,
+        WriteCapacityUnits: 1
       }
     };
 
@@ -50,15 +50,15 @@ class ContactSeeder {
   async deleteTable() {
     const result = await this.dynamodb.deleteTable({ TableName: this._tablename }).promise();
 
-    return !!result.$response.err
+    return !!result.$response.err;
   }
 
-  /** 
-   * @param {AddressBook.Contact[]} contacts The seed data
+  /**
+   * @param {AddressBook.Contact[]} users The seed data
    */
-  async seed(contacts = []) {
+  async seed(users = []) {
     // map the contact entries to a put request object
-    const putRequests = contacts.map(c => ({
+    const putRequests = users.map(c => ({
       PutRequest: {
         Item: Object.assign({}, c)
       }
@@ -75,4 +75,4 @@ class ContactSeeder {
   }
 }
 
-exports.ContactSeeder = ContactSeeder;
+exports.UserSeeder = UserSeeder;
